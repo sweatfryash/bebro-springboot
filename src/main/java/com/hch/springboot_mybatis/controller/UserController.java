@@ -31,19 +31,19 @@ public class UserController {
 
     /*-----下面为app里会用且必须要有的方法------*/
 
-    @RequestMapping("/findByEmail")
-    public User findByEmail(String email){
-        return userService.findByEmail(email);
+    @RequestMapping("/findById")
+    public User findById(Integer userId){
+        return userService.findById(userId);
     }
-    //登录成功返回1 否则 0
+
     @RequestMapping("/logIn")
     public User logIn(User user) {
         return userService.logIn(user);
     }
 
     //添加成功返回1，捕获到异常既用户已存在返回0,验证码不符返回-1
-    @RequestMapping("/insertUser")
-    public int insertUser(String email,String username,String password,String avatarUrl,String bio,String code, HttpSession session) {
+    @RequestMapping("/addUser")
+    public int addUser(String email,String password,String code, HttpSession session) {
         //获得session里存的验证码用来比对
         String sessionCode;
         //若session中没有code返回-2
@@ -53,7 +53,7 @@ public class UserController {
             logger.error("session中没有code"+e.toString());
             return -2;
         }
-        User user=new User(email,username,password,avatarUrl,bio);
+        User user=new User(email,password);
         if (code.equals(sessionCode)){
             try {
                 session.setAttribute("code","null");
@@ -111,15 +111,15 @@ public class UserController {
     }
 
     //查找用户关注的人，参数的email对应 fans
-    @RequestMapping("/findFollow")
-    public List<User> findFollow(String email){
-        return userService.findFollow(email);
+    @RequestMapping("/findFollowing")
+    public List<User> findFollowing(Integer userId){
+        return userService.findFollowing(userId);
     }
 
     //查找用户关注的人，参数的email对应 fans
-    @RequestMapping("/findFans")
-    public List<User> findFans(String email){
-        return userService.findFans(email);
+    @RequestMapping("/findFan")
+    public List<User> findFan(String email){
+        return userService.findFan(email);
     }
 
 

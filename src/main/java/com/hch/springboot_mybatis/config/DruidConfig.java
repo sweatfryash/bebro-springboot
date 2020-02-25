@@ -26,7 +26,6 @@ public class DruidConfig {
     public ServletRegistrationBean statViewServlet() {
         ServletRegistrationBean bean = new ServletRegistrationBean(new StatViewServlet(), "/druid/*");
         Map<String, String> initParams = new HashMap<>();
-
         initParams.put("loginUsername", "admin");
         initParams.put("loginPassword", "123456");
         initParams.put("allow", "");//默认允许所有访问
@@ -34,7 +33,6 @@ public class DruidConfig {
         bean.setInitParameters(initParams);
         return bean;
     }
-
     //web监控的filter
     @Bean
     public FilterRegistrationBean webStatFilter() {

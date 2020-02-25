@@ -7,7 +7,7 @@ import java.util.List;
 public interface UserService {
 
     //根据email查找用户
-    User findByEmail(String email);
+    User findById(Integer userId);
     //用户注册，添加成功返回1，否则会抛出异常（使用trycatch捕获异常返回 0 -2019年10月19日10:24:37）
     int insertUser(User user);
 
@@ -21,10 +21,10 @@ public interface UserService {
     int updateUserDetail(User user);
 
     //查找用户关注的人，参数的email对应 fans
-    List<User> findFollow(String email);
+    List<User> findFollowing(Integer userId);
 
     //查找用户的粉丝
-    List<User> findFans(String email);
+    List<User> findFan(String email);
 
     //查询是否已经存在某个用户配合添加用户使用（暂时不需要了）
     //User isExisted();

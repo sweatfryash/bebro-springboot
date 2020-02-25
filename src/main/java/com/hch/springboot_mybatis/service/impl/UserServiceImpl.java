@@ -5,18 +5,21 @@ import com.hch.springboot_mybatis.mapper.UserMapper;
 import com.hch.springboot_mybatis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
 
+    private final UserMapper userMapper;
+
     @Autowired
-    private UserMapper userMapper;
+    public UserServiceImpl(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
 
     @Override
-    public User findByEmail(String email) {
-        return userMapper.findByEmail(email);
+    public User findById(Integer userId) {
+        return userMapper.findById(userId);
     }
 
     @Override
@@ -41,12 +44,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findFollow(String email) {
-        return userMapper.findFollow(email);
+    public List<User> findFollowing(Integer userId) {
+        return userMapper.findFollow(userId);
     }
 
     @Override
-    public List<User> findFans(String email) {
+    public List<User> findFan(String email) {
         return userMapper.findFans(email);
     }
 
