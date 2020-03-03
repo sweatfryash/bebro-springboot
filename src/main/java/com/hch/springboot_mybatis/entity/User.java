@@ -2,7 +2,6 @@ package com.hch.springboot_mybatis.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-
 import java.io.Serializable;
 
 @EntityScan
@@ -14,9 +13,14 @@ public class User implements Serializable {
     private String password;
     private String avatarUrl;
     private String bio;
+    private String birthDay;
+    private String gender;
+    private String city;
+    private String backImgUrl;
     private Integer postNum;    //动态数量
     private Integer fanNum;     //粉丝数
     private Integer followNum;  //关注数
+    private Integer isFollow;   //是否是查询者的关注
 
     public User() {
     }
@@ -99,6 +103,46 @@ public class User implements Serializable {
         this.followNum = followNum;
     }
 
+    public String getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(String birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getBackImgUrl() {
+        return backImgUrl;
+    }
+
+    public void setBackImgUrl(String backImgUrl) {
+        this.backImgUrl = backImgUrl;
+    }
+
+    public Integer getIsFollow() {
+        return isFollow;
+    }
+
+    public void setIsFollow(Integer isFollow) {
+        this.isFollow = isFollow;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -108,9 +152,14 @@ public class User implements Serializable {
                 ", password='" + password + '\'' +
                 ", avatarUrl='" + avatarUrl + '\'' +
                 ", bio='" + bio + '\'' +
+                ", birthDay='" + birthDay + '\'' +
+                ", gender='" + gender + '\'' +
+                ", city='" + city + '\'' +
+                ", backImgUrl='" + backImgUrl + '\'' +
                 ", postNum=" + postNum +
                 ", fanNum=" + fanNum +
                 ", followNum=" + followNum +
+                ", isFollow=" + isFollow +
                 '}';
     }
 }

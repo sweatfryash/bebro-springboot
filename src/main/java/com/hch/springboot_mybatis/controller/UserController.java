@@ -1,14 +1,18 @@
 package com.hch.springboot_mybatis.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.hch.springboot_mybatis.entity.User;
 import com.hch.springboot_mybatis.service.MailService;
 import com.hch.springboot_mybatis.service.UserService;
+import com.hch.springboot_mybatis.utils.JsonResult;
 import com.hch.springboot_mybatis.utils.RandomCodeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -16,111 +20,169 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
     private final UserService userService;
     private final MailService mailService;
     private final RandomCodeUtil randomCodeUtil;
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    public UserController(UserService userService, MailService mailService,RandomCodeUtil randomCodeUtil){
-        this.userService=userService;
-        this.mailService=mailService;
-        this.randomCodeUtil=randomCodeUtil;
+    public UserController(UserService userService, MailService mailService, RandomCodeUtil randomCodeUtil) {
+        this.userService = userService;
+        this.mailService = mailService;
+        this.randomCodeUtil = randomCodeUtil;
     }
-
-    /*-----下面为app里会用且必须要有的方法------*/
-
-    @RequestMapping("/findById")
-    public User findById(Integer userId){
-        return userService.findById(userId);
+    //根据ID查找用户
+    @RequestMapping("/findUserById")
+    public JsonResult<User> findUserById(Integer askId,Integer userId) {
+        User res =userService.findUserById(askId,userId);
+        JsonResult<User> json;
+        json = res != null
+                ? new JsonResult<>(res, "1", "查询成功")
+                : new JsonResult<>(null, "0", "查询不到该userId");
+        return json;
     }
-
+    //登录
     @RequestMapping("/logIn")
-    public User logIn(User user) {
-        return userService.logIn(user);
+    public JsonResult<User> logIn(User user) {
+        User res = userService.logIn(user);
+        JsonResult<User> json;
+        json = res != null
+                ? new JsonResult<>(res, "1", "验证成功")
+                : new JsonResult<>(null, "0", "验证失败");
+        return json;
     }
 
     //添加成功返回1，捕获到异常既用户已存在返回0,验证码不符返回-1
     @RequestMapping("/addUser")
-    public int addUser(String email,String password,String code, HttpSession session) {
+    public int addUser(String email, String password, String code, HttpSession session) {
         //获得session里存的验证码用来比对
         String sessionCode;
         //若session中没有code返回-2
         try {
-            sessionCode=session.getAttribute("code").toString();
-        }catch (Exception e){
-            logger.error("session中没有code"+e.toString());
+            sessionCode = session.getAttribute("code").toString();
+        } catch (Exception e) {
+            logger.error("session中没有code" + e.toString());
             return -2;
         }
-        User user=new User(email,password);
-        if (code.equals(sessionCode)){
+        User user = new User(email, password);
+        if (code.equals(sessionCode)) {
             try {
-                session.setAttribute("code","null");
+                session.setAttribute("code", "null");
                 return userService.insertUser(user);
             } catch (Exception e) {
                 logger.warn("-----添加用户时邮箱重复sql异常，异常已被catch捕获------\n" + e.toString());
                 return 0;
             }
-        }else {
+        } else {
             return -1;
         }
     }
+
     //更新密码
     @RequestMapping("/updatePwd")
-    public int updatePwd(String email,String password,String code,HttpSession session) {
+    public int updatePwd(String email, String password, String code, HttpSession session) {
         //获得session里存的验证码用来比对
         String sessionCode;
         //若session中没有code返回-2
         try {
-            sessionCode=session.getAttribute("code").toString();
-        }catch (Exception e){
-            logger.error("session中没有code"+e.toString());
+            sessionCode = session.getAttribute("code").toString();
+        } catch (Exception e) {
+            logger.error("session中没有code" + e.toString());
             return -2;
         }
-        if (code.equals(sessionCode)){
+        if (code.equals(sessionCode)) {
             try {
-                session.setAttribute("code","null");
-                return userService.updatePwd(email,password);
+                session.setAttribute("code", "null");
+                return userService.updatePwd(email, password);
             } catch (Exception e) {
-                logger.warn( e.toString());
+                logger.warn(e.toString());
                 return 0;
             }
-        }else {
+        } else {
             return -1;
         }
     }
 
     //更新用户信息
     @RequestMapping("/updateUserDetail")
-    public int updateUserDetail(User user){return userService.updateUserDetail(user);}
+    public int updateUserDetail(User user) {
+        return userService.updateUserDetail(user);
+    }
 
     //处理发送验证码的请求，生成一个随机验证码，添加到邮件中发送出去还要把code保存下来
     @RequestMapping("/sendEmail")
-    public int sendEmail(String email, HttpSession session){
-        String code=randomCodeUtil.getRandomCode();
-        session.setAttribute("code",code);
+    public int sendEmail(String email, HttpSession session) {
+        String code = randomCodeUtil.getRandomCode();
+        session.setAttribute("code", code);
         logger.warn(code);
-        try{
-            mailService.sendHtmlMail(email,code);
+        try {
+            mailService.sendHtmlMail(email, code);
             return 1;
-        }catch (Exception e){
-            logger.error( e.toString());
+        } catch (Exception e) {
+            logger.error(e.toString());
             return 0;
         }
     }
 
-    //查找用户关注的人，参数的email对应 fans
-    @RequestMapping("/findFollowing")
-    public List<User> findFollowing(Integer userId){
-        return userService.findFollowing(userId);
+    //查找用户关注的人
+    @RequestMapping("/findFollow")
+    public JsonResult<List<User>> findFollow(Integer userId,Integer page) {
+        PageHelper.startPage(page, 20);
+        List<User> res = userService.findFollow(userId);
+        PageInfo<User> pageInfo = new PageInfo<>(res);
+        JsonResult<List<User>> json;
+        json = !res.isEmpty()
+                ? new JsonResult<>(res, "1", "查询成功",pageInfo.getPages())
+                : new JsonResult<>(null, "0", "没有正在关注的人",pageInfo.getPages());
+        return json;
     }
 
-    //查找用户关注的人，参数的email对应 fans
+    //查找用户的粉丝
     @RequestMapping("/findFan")
-    public List<User> findFan(String email){
-        return userService.findFan(email);
+    public JsonResult<List<User>> findFan(Integer userId,Integer page) {
+        PageHelper.startPage(page, 20);
+        List<User> res = userService.findFan(userId);
+        PageInfo<User> pageInfo = new PageInfo<>(res);
+        JsonResult<List<User>> json;
+        json = !res.isEmpty()
+                ? new JsonResult<>(res, "1", "查询成功", pageInfo.getPages())
+                : new JsonResult<>(null, "0", "没得粉丝", pageInfo.getPages());
+        return json;
     }
 
+    @RequestMapping("/followAUser")
+    public  JsonResult<Integer> followAUser(Integer fanId,Integer followedId){
+        JsonResult<Integer> json;
+        try{
+            Integer res = userService.followAUser(fanId,followedId);
+            json = new JsonResult<>("1","关注成功");
+        }catch (Exception e){
+            json = new JsonResult<>("0","已经关注过了");
+            //logger.info("重复关注"+e.toString());
+        }
+        return json;
+    }
+    @RequestMapping("/cancelFollowAUser")
+    public  JsonResult<Integer> cancelFollowAUser(Integer fanId,Integer followedId){
+        JsonResult<Integer> json;
+        int res = userService.cancelFollowAUser(fanId,followedId);
+        json = new JsonResult<>(Integer.toString(res),"取消关注成功");
+        return json;
+    }
+    @RequestMapping("/updateUserProperty")
+    public  JsonResult<Integer> updateUserProperty(Integer userId,String property,String value){
+        JsonResult<Integer> json;
+        Integer res = userService.updateUserProperty(userId,property,value);
+        json = new JsonResult<>(Integer.toString(res),"");
+        return json;
+    }
+
+    @RequestMapping("/isExistTheUsername")
+    public  JsonResult<Integer> isExistTheUsername(String username){
+        JsonResult<Integer> json;
+        Integer res = userService.isExistTheUsername(username);
+        json = new JsonResult<>(Integer.toString(res),"");
+        return json;
+    }
 
 }

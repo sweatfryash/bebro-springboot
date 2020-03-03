@@ -18,8 +18,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(Integer userId) {
-        return userMapper.findById(userId);
+    public User findUserById(Integer askId,Integer userId) {
+        return userMapper.findUserById(askId,userId);
     }
 
     @Override
@@ -44,13 +44,33 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findFollowing(Integer userId) {
+    public List<User> findFollow(Integer userId) {
         return userMapper.findFollow(userId);
     }
 
     @Override
-    public List<User> findFan(String email) {
-        return userMapper.findFans(email);
+    public List<User> findFan(Integer userId) {
+        return userMapper.findFans(userId);
+    }
+
+    @Override
+    public int followAUser(Integer fanId, Integer followedId) {
+        return userMapper.followAUser(fanId,followedId);
+    }
+
+    @Override
+    public int cancelFollowAUser(Integer fanId, Integer followedId) {
+        return userMapper.cancelFollowAUser(fanId,followedId);
+    }
+
+    @Override
+    public Integer updateUserProperty(Integer userId, String property, String value) {
+        return userMapper.updateUserProperty(userId,property,value);
+    }
+
+    @Override
+    public Integer isExistTheUsername(String username) {
+        return userMapper.isExistTheUsername(username);
     }
 
 

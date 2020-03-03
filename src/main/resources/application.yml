@@ -7,7 +7,6 @@ spring:
     username: root
     password: 113322
     type: com.alibaba.druid.pool.DruidDataSource
-
     druid:
       initial-size: 8
       min-idle: 1
@@ -40,3 +39,10 @@ spring:
       mail.smtp.socketFactory.port: 465
       mail.smtp.socketFactory.class: javax.net.ssl.SSLSocketFactory
       mail.smtp.socketFactory.fallback: false
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  pageSizeZero: true
+  params: count=countSql
+

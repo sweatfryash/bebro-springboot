@@ -17,17 +17,27 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public int addPost(Post post) {
-        return postMapper.addPost(post);
+    public List<Post> getFollowPosts(Integer userId) {
+        return postMapper.getFollowPosts(userId);
     }
 
     @Override
-    public List<Post> getAllPosts() {
-        return postMapper.getAllPosts();
+    public List<Post> getAllPostsByDate(Integer userId) {
+        return postMapper.getAllPostsByDate(userId);
     }
 
     @Override
-    public List<Post> getPostsByEmail(String email) {
-        return postMapper.getPostsByEmail(email);
+    public List<Post> getPostsById(Integer askId, Integer userId) {
+        return postMapper.getPostsById(askId, userId);
+    }
+
+    @Override
+    public Integer likePost(Integer userId, Integer postId) {
+        return postMapper.likePost(userId, postId);
+    }
+
+    @Override
+    public Integer cancelLikePost(Integer userId, Integer postId) {
+        return postMapper.cancelLikePost(userId,postId);
     }
 }

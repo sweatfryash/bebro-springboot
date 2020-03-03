@@ -5,10 +5,15 @@ import java.util.List;
 
 public interface PostService {
 
-    //插入一条新的动态
-    int addPost(Post post);
-    //获取数据库中所有的动态数据，不需要参数
-    List<Post> getAllPosts();
-    //获取指定用户的所有动态
-    List<Post> getPostsByEmail(String email);
+    //根据用户id获取到其关注的用户们的动态
+    List<Post> getFollowPosts(Integer userId);
+
+    List<Post> getAllPostsByDate(Integer userId);
+
+    List<Post> getPostsById(Integer askId,Integer userId);
+
+    Integer likePost(Integer userId ,Integer postId);
+
+    Integer cancelLikePost(Integer userId ,Integer postId);
+
 }
