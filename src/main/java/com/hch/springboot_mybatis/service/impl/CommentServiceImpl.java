@@ -1,7 +1,8 @@
-package com.hch.springboot_mybatis.service;
+package com.hch.springboot_mybatis.service.impl;
 
 import com.hch.springboot_mybatis.entity.Comment;
 import com.hch.springboot_mybatis.mapper.CommentMapper;
+import com.hch.springboot_mybatis.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +29,11 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Integer addComment(Comment comment) {
-        return null;
+        return commentMapper.addComment(comment);
     }
 
     @Override
     public Integer deleteComment(Integer commentId) {
-        return null;
+        return commentMapper.deleteComment(commentId);
     }
 }

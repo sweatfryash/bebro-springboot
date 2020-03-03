@@ -1,5 +1,6 @@
 package com.hch.springboot_mybatis.mapper;
 
+import com.hch.springboot_mybatis.entity.Comment;
 import com.hch.springboot_mybatis.entity.Post;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
@@ -41,4 +42,11 @@ public interface PostMapper {
     //是否给动态点赞了
     @Select("select count(*) from likePost where userId = #{askId} and postId = #{postId}")
     Integer isLiked(Integer askId,Integer postId);
+
+    //添加动态
+    @Insert("insert into post (userId,date,text,imageUrl) values(#{userId},#{date},#{text},#{imageUrl}) ")
+    Integer addPost(Post post);
+    //删除动态
+    @Delete("delete from post where postId = #{postId}")
+    Integer deletePost(Integer postId);
 }

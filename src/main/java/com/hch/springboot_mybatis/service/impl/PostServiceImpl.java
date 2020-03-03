@@ -40,4 +40,14 @@ public class PostServiceImpl implements PostService {
     public Integer cancelLikePost(Integer userId, Integer postId) {
         return postMapper.cancelLikePost(userId,postId);
     }
+
+    @Override
+    public Integer addPost(Post post) {
+        return postMapper.addPost(post);
+    }
+
+    @Override
+    public Integer deletePost(Integer postId) {
+        return postMapper.deletePost(postId);
+    }
 }

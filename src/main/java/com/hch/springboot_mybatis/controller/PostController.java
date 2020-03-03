@@ -2,6 +2,7 @@ package com.hch.springboot_mybatis.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.hch.springboot_mybatis.entity.Comment;
 import com.hch.springboot_mybatis.entity.Post;
 import com.hch.springboot_mybatis.service.PostService;
 import com.hch.springboot_mybatis.utils.JsonResult;
@@ -73,6 +74,30 @@ public class PostController {
         JsonResult<Integer> json;
         Integer res = postService.cancelLikePost(userId ,postId);
         json = new JsonResult<>(Integer.toString(res),"");
+        return json;
+    }
+    @RequestMapping("/addPost")
+    public JsonResult<Integer> addPost(Post post){
+        JsonResult<Integer> json;
+        try {
+            Integer res = postService.addPost(post);
+            json = new JsonResult<>("1","发布动态成功");
+        }catch (Exception e){
+            logger.warn(e.toString());
+            json = new JsonResult<>("0","发表失败");
+        }
+        return json;
+    }
+    @RequestMapping("/deletePost")
+    public JsonResult<Integer> deletePost(Integer postId){
+        JsonResult<Integer> json;
+        try {
+            Integer res = postService.deletePost(postId);
+            json = new JsonResult<>("1","动态已删除");
+        }catch (Exception e){
+            logger.warn(e.toString());
+            json = new JsonResult<>("0","删除动态失败");
+        }
         return json;
     }
 }

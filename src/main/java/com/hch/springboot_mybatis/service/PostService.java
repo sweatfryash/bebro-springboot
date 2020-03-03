@@ -1,5 +1,6 @@
 package com.hch.springboot_mybatis.service;
 
+import com.hch.springboot_mybatis.entity.Comment;
 import com.hch.springboot_mybatis.entity.Post;
 import java.util.List;
 
@@ -16,4 +17,7 @@ public interface PostService {
 
     Integer cancelLikePost(Integer userId ,Integer postId);
 
+    Integer addPost(Post post);
+
+    Integer deletePost(Integer postId);
 }

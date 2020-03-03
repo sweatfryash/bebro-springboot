@@ -31,4 +31,11 @@ public interface CommentMapper {
     //是否给评论点赞了
     @Select("select count(*) from likeComment where userId = #{askId} and commentId = #{commentId}")
     Integer isLiked(Integer askId,Integer commentId);
+    //添加评论
+    @Insert("insert into comments (userId,postId,replyComId,content,date) " +
+            "values(#{userId},#{postId},#{replyComId},#{content},#{date}) ")
+    Integer addComment(Comment comment);
+    //删除评论
+    @Delete("delete from comments where commentId = #{commentId}")
+    Integer deleteComment(Integer commentId);
 }
