@@ -10,13 +10,37 @@ public class Post implements Serializable {
 
     private Integer postId;
     private Integer userId;
+    private String username;
     private String date;
     private String text;
     private String imageUrl;
     private String avatarUrl;
     private Integer likeNum;
+    private Integer commentNum;
+    private Integer forwardNum;
     private Integer isLiked;
-    private List<Comment> commentList;
+    private Integer isStar;
+    //转发
+    private Integer forwardId;
+    private String forwardName;
+    private String forwardText;
+    private String forwardImageUrl;
+
+    public Integer getCommentNum() {
+        return commentNum;
+    }
+
+    public void setCommentNum(Integer commentNum) {
+        this.commentNum = commentNum;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public Integer getPostId() {
         return postId;
@@ -66,14 +90,6 @@ public class Post implements Serializable {
         this.avatarUrl = avatarUrl;
     }
 
-    public List<Comment> getCommentList() {
-        return commentList;
-    }
-
-    public void setCommentList(List<Comment> commentList) {
-        this.commentList = commentList;
-    }
-
     public Integer getLikeNum() {
         return likeNum;
     }
@@ -90,17 +106,51 @@ public class Post implements Serializable {
         this.isLiked = isLiked;
     }
 
-    @Override
-    public String toString() {
-        return "Post{" +
-                "postId='" + postId + '\'' +
-                ", userId=" + userId +
-                ", date='" + date + '\'' +
-                ", text='" + text + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
-                ", avatarUrl='" + avatarUrl + '\'' +
-                ", likeNum=" + likeNum +
-                ", commentList=" + commentList +
-                '}';
+    public Integer getIsStar() {
+        return isStar;
+    }
+
+    public void setIsStar(Integer isStar) {
+        this.isStar = isStar;
+    }
+
+    public Integer getForwardId() {
+        return forwardId;
+    }
+
+    public void setForwardId(Integer forwardId) {
+        this.forwardId = forwardId;
+    }
+
+    public String getForwardName() {
+        return forwardName;
+    }
+
+    public void setForwardName(String forwardName) {
+        this.forwardName = forwardName;
+    }
+
+    public String getForwardImageUrl() {
+        return forwardImageUrl;
+    }
+
+    public void setForwardImageUrl(String forwardImageUrl) {
+        this.forwardImageUrl = forwardImageUrl;
+    }
+
+    public Integer getForwardNum() {
+        return forwardNum;
+    }
+
+    public void setForwardNum(Integer forwardNum) {
+        this.forwardNum = forwardNum;
+    }
+
+    public String getForwardText() {
+        return forwardText;
+    }
+
+    public void setForwardText(String forwardText) {
+        this.forwardText = forwardText;
     }
 }

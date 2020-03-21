@@ -14,7 +14,7 @@ public class User implements Serializable {
     private String avatarUrl;
     private String bio;
     private String birthDay;
-    private String gender;
+    private Integer gender;
     private String city;
     private String backImgUrl;
     private Integer postNum;    //动态数量
@@ -111,11 +111,11 @@ public class User implements Serializable {
         this.birthDay = birthDay;
     }
 
-    public String getGender() {
+    public Integer getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Integer gender) {
         this.gender = gender;
     }
 

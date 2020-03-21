@@ -1,14 +1,17 @@
 package com.hch.springboot_mybatis.service;
 
+import com.hch.springboot_mybatis.entity.Updates;
 import com.hch.springboot_mybatis.entity.User;
+
 import java.util.List;
 
 public interface UserService {
 
     //根据id查找用户
     User findUserById(Integer askId,Integer userId);
+    User findUserByName(Integer askId, String username);
     //用户注册，添加成功返回1，否则会抛出异常（使用trycatch捕获异常返回 0 -2019年10月19日10:24:37）
-    int insertUser(User user);
+    Integer insertUser(User user);
     //用户登录，
     User logIn(User user);
     //更新密码，更新成功返回1，否则返回0
@@ -27,4 +30,13 @@ public interface UserService {
     Integer updateUserProperty(Integer userId,String property,String value);
     //该用户名是否已存在
     Integer isExistTheUsername(String username);
+    //邮箱是否cunz
+    Integer isExistTheEmail(String email);
+    //点赞了某个post的人
+    List<User> getLikedUser(Integer askId,Integer postId);
+
+    List<User> searchUser(Integer askId,String key);
+
+
+    Updates checkUpdate();
 }

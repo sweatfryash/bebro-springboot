@@ -4,22 +4,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import java.io.Serializable;
-import java.util.List;
 
 @EntityScan
-public class Comment implements Serializable {
+public class Reply implements Serializable {
+    private Integer replyId;
     private Integer commentId;
     private Integer userId;
-    private Integer postId;
     private String avatarUrl;
     private String username;
+    private String beReplyName;
     private String date;
     private String text;
     private String imageUrl;
     private Integer isLiked;
-    private Integer likeNum;
-    private Integer replyNum;
-    private List<Reply> replyList;
+    private Integer LikeNum;
 
     public String getAvatarUrl() {
         return avatarUrl;
@@ -37,13 +35,14 @@ public class Comment implements Serializable {
         this.username = username;
     }
 
-    public Integer getIsLiked() {
-        return isLiked;
+    public Integer getReplyId() {
+        return replyId;
     }
 
-    public void setIsLiked(Integer isLiked) {
-        this.isLiked = isLiked;
+    public void setReplyId(Integer replyId) {
+        this.replyId = replyId;
     }
+
     public Integer getCommentId() {
         return commentId;
     }
@@ -59,21 +58,13 @@ public class Comment implements Serializable {
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
-    @JsonIgnore
-    public Integer getPostId() {
-        return postId;
+
+    public String getBeReplyName() {
+        return beReplyName;
     }
 
-    public void setPostId(Integer postId) {
-        this.postId = postId;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
+    public void setBeReplyName(String beReplyName) {
+        this.beReplyName = beReplyName;
     }
 
     public String getDate() {
@@ -84,20 +75,12 @@ public class Comment implements Serializable {
         this.date = date;
     }
 
-    public Integer getLikeNum() {
-        return likeNum;
+    public String getText() {
+        return text;
     }
 
-    public void setLikeNum(Integer likeNum) {
-        this.likeNum = likeNum;
-    }
-
-    public List<Reply> getReplyList() {
-        return replyList;
-    }
-
-    public void setReplyList(List<Reply> replyList) {
-        this.replyList = replyList;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public String getImageUrl() {
@@ -108,11 +91,20 @@ public class Comment implements Serializable {
         this.imageUrl = imageUrl;
     }
 
-    public Integer getReplyNum() {
-        return replyNum;
+    public Integer getIsLiked() {
+        return isLiked;
     }
 
-    public void setReplyNum(Integer replyNum) {
-        this.replyNum = replyNum;
+    public void setIsLiked(Integer isLiked) {
+        this.isLiked = isLiked;
     }
+
+    public Integer getLikeNum() {
+        return LikeNum;
+    }
+
+    public void setLikeNum(Integer likeNum) {
+        LikeNum = likeNum;
+    }
+
 }

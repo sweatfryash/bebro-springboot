@@ -6,6 +6,8 @@ import com.hch.springboot_mybatis.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service("commentService")
 public class CommentServiceImpl implements CommentService {
 
@@ -35,5 +37,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Integer deleteComment(Integer commentId) {
         return commentMapper.deleteComment(commentId);
+    }
+
+    @Override
+    public List<Comment> getCommentByPostId(Integer askId, Integer postId) {
+        return commentMapper.getCommentByPostId(askId, postId);
     }
 }

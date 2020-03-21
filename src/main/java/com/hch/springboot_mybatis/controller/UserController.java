@@ -2,6 +2,7 @@ package com.hch.springboot_mybatis.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.hch.springboot_mybatis.entity.Updates;
 import com.hch.springboot_mybatis.entity.User;
 import com.hch.springboot_mybatis.service.MailService;
 import com.hch.springboot_mybatis.service.UserService;
@@ -41,6 +42,15 @@ public class UserController {
                 : new JsonResult<>(null, "0", "查询不到该userId");
         return json;
     }
+    @RequestMapping("/findUserByName")
+    public JsonResult<User> findUserByName(Integer askId,String username) {
+        User res =userService.findUserByName(askId,username);
+        JsonResult<User> json;
+        json = res != null
+                ? new JsonResult<>(res, "1", "查询成功")
+                : new JsonResult<>(null, "0", "查询不到该userId");
+        return json;
+    }
     //登录
     @RequestMapping("/logIn")
     public JsonResult<User> logIn(User user) {
@@ -54,7 +64,8 @@ public class UserController {
 
     //添加成功返回1，捕获到异常既用户已存在返回0,验证码不符返回-1
     @RequestMapping("/addUser")
-    public int addUser(String email, String password, String code, HttpSession session) {
+    public JsonResult<User>  addUser(String email, String password, String code, HttpSession session) {
+        JsonResult<User> json;
         //获得session里存的验证码用来比对
         String sessionCode;
         //若session中没有code返回-2
@@ -62,20 +73,23 @@ public class UserController {
             sessionCode = session.getAttribute("code").toString();
         } catch (Exception e) {
             logger.error("session中没有code" + e.toString());
-            return -2;
+            json =  new JsonResult<>(null, "-2", "验证码不符或已经超时了");
+            return json;
         }
         User user = new User(email, password);
         if (code.equals(sessionCode)) {
-            try {
+            if(userService.isExistTheEmail(email) == 0){
                 session.setAttribute("code", "null");
-                return userService.insertUser(user);
-            } catch (Exception e) {
-                logger.warn("-----添加用户时邮箱重复sql异常，异常已被catch捕获------\n" + e.toString());
-                return 0;
+                userService.insertUser(user);
+                logger.info(user.toString());
+                json =  new JsonResult<>(user, "1", "注册成功请前往登录");
+            } else{
+                json =  new JsonResult<>(null, "0", "邮箱已经注册过了");
             }
         } else {
-            return -1;
+            json =  new JsonResult<>(null, "-1", "验证码不符");
         }
+        return json;
     }
 
     //更新密码
@@ -108,18 +122,17 @@ public class UserController {
     public int updateUserDetail(User user) {
         return userService.updateUserDetail(user);
     }
-
     //处理发送验证码的请求，生成一个随机验证码，添加到邮件中发送出去还要把code保存下来
     @RequestMapping("/sendEmail")
     public int sendEmail(String email, HttpSession session) {
         String code = randomCodeUtil.getRandomCode();
         session.setAttribute("code", code);
-        logger.warn(code);
+        logger.info(code);
         try {
             mailService.sendHtmlMail(email, code);
             return 1;
         } catch (Exception e) {
-            logger.error(e.toString());
+            e.printStackTrace();
             return 0;
         }
     }
@@ -133,7 +146,16 @@ public class UserController {
         JsonResult<List<User>> json;
         json = !res.isEmpty()
                 ? new JsonResult<>(res, "1", "查询成功",pageInfo.getPages())
-                : new JsonResult<>(null, "0", "没有正在关注的人",pageInfo.getPages());
+                : new JsonResult<>(res, "0", "没有正在关注的人",pageInfo.getPages());
+        return json;
+    }
+    @RequestMapping("/searchUser")
+    public JsonResult<List<User>> searchUser(Integer askId,String key,Integer page) {
+        PageHelper.startPage(page, 20);
+        List<User> res = userService.searchUser(askId, key);
+        PageInfo<User> pageInfo = new PageInfo<>(res);
+        JsonResult<List<User>> json;
+        json = new JsonResult<>(res, "1", "查询成功",pageInfo.getPages());
         return json;
     }
 
@@ -146,7 +168,18 @@ public class UserController {
         JsonResult<List<User>> json;
         json = !res.isEmpty()
                 ? new JsonResult<>(res, "1", "查询成功", pageInfo.getPages())
-                : new JsonResult<>(null, "0", "没得粉丝", pageInfo.getPages());
+                : new JsonResult<>(res, "0", "没得粉丝", pageInfo.getPages());
+        return json;
+    }
+    @RequestMapping("/getLikedUser")
+    public JsonResult<List<User>> getLikedUser(Integer askId,Integer postId,Integer page) {
+        PageHelper.startPage(page, 20);
+        List<User> res = userService.getLikedUser(askId,postId);
+        PageInfo<User> pageInfo = new PageInfo<>(res);
+        JsonResult<List<User>> json;
+        json = !res.isEmpty()
+                ? new JsonResult<>(res, "1", "查询成功", pageInfo.getPages())
+                : new JsonResult<>(res, "0", "没得点赞", pageInfo.getPages());
         return json;
     }
 
@@ -171,6 +204,7 @@ public class UserController {
     }
     @RequestMapping("/updateUserProperty")
     public  JsonResult<Integer> updateUserProperty(Integer userId,String property,String value){
+        //logger.warn(value);
         JsonResult<Integer> json;
         Integer res = userService.updateUserProperty(userId,property,value);
         json = new JsonResult<>(Integer.toString(res),"");
@@ -182,6 +216,18 @@ public class UserController {
         JsonResult<Integer> json;
         Integer res = userService.isExistTheUsername(username);
         json = new JsonResult<>(Integer.toString(res),"");
+        return json;
+    }
+    @RequestMapping("/checkUpdate")
+    public  JsonResult<Updates> checkUpdate(){
+        JsonResult<Updates> json;
+        try{
+            Updates res = (Updates) userService.checkUpdate();
+            json = new JsonResult<>(res,"1","检测成功");
+        }catch (Exception e){
+            logger.error(e.toString());
+            json = new JsonResult<>("0","未知错误");
+        }
         return json;
     }
 

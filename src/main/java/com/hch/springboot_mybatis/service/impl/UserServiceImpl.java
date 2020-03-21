@@ -1,5 +1,6 @@
 package com.hch.springboot_mybatis.service.impl;
 
+import com.hch.springboot_mybatis.entity.Updates;
 import com.hch.springboot_mybatis.entity.User;
 import com.hch.springboot_mybatis.mapper.UserMapper;
 import com.hch.springboot_mybatis.service.UserService;
@@ -23,8 +24,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int insertUser(User user) {
-        return userMapper.insertUser( user);
+    public User findUserByName(Integer askId, String username) {
+        return userMapper.findUserByName(askId, username);
+    }
+
+    @Override
+    public Integer insertUser(User user) {
+        return userMapper.insertUser(user);
     }
 
     @Override
@@ -71,6 +77,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer isExistTheUsername(String username) {
         return userMapper.isExistTheUsername(username);
+    }
+
+    @Override
+    public Integer isExistTheEmail(String email) {
+        return userMapper.isExistTheEmail(email);
+    }
+
+    @Override
+    public List<User> getLikedUser(Integer askId, Integer postId) {
+        return userMapper.getLikedUser(askId, postId);
+    }
+
+    @Override
+    public List<User> searchUser(Integer askId,String key) {
+        return userMapper.searchUser(askId,key);
+    }
+
+    @Override
+    public Updates checkUpdate() {
+        return userMapper.checkUpdate();
     }
 
 

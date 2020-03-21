@@ -8,28 +8,42 @@ spring:
     password: 113322
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
-      initial-size: 8
-      min-idle: 1
+      #utf8不支持emoji，改成utf8mb4
+      connectionInitSqls: set names utf8mb4
+      initial-size: 5
+      min-idle: 5
       max-active: 20
       max-wait: 60000
-      time-between-eviction-runsMillis: 60000
-      min-evictable-idle-timeMillis: 300000
-      validation-query: select 'x' FROM DUAL
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
       test-while-idle: true
       test-on-borrow: false
       test-on-return: false
       pool-prepared-statements: true
-      max-open-prepared-statements: 20
+
       max-pool-prepared-statement-per-connection-size: 20
-      #配置监控统计拦截的filters
-      filters: stat,wall,slf4j
-      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      filters: stat,wall
       use-global-data-source-stat: true
+      stat-view-servlet:
+        login-username: admin
+        login-password: 123456
+        reset-enable: false
+        url-pattern: /druid/*
+        # 添加IP白名单
+        #allow:
+        # 添加IP黑名单，当白名单和黑名单重复时，黑名单优先级更高
+        #deny:
+      web-stat-filter:
+        # 添加过滤规则
+        url-pattern: /*
+        # 忽略过滤格式
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
   #配置邮箱
   mail:
     host: smtp.qq.com
     username: 342254689@qq.com
-    password: qsxlygghkgmsbggc
+    password: ijksoedjpmrybjeh
     default-encoding: UTF-8
     port: 465
     protocol: smtp

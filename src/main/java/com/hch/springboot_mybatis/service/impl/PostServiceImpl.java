@@ -28,7 +28,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> getPostsById(Integer askId, Integer userId) {
-        return postMapper.getPostsById(askId, userId);
+        return postMapper.getPostsByUserId(askId, userId);
+    }
+
+    @Override
+    public List<Post> getStarPosts(Integer userId) {
+        return postMapper.getStarPosts(userId);
     }
 
     @Override
@@ -42,6 +47,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public Integer starPost(Integer userId, Integer postId) {
+        return postMapper.starPost(userId, postId);
+    }
+
+    @Override
+    public Integer cancelStarPost(Integer userId, Integer postId) {
+        return postMapper.cancelStarPost(userId, postId);
+    }
+
+    @Override
     public Integer addPost(Post post) {
         return postMapper.addPost(post);
     }
@@ -49,5 +64,40 @@ public class PostServiceImpl implements PostService {
     @Override
     public Integer deletePost(Integer postId) {
         return postMapper.deletePost(postId);
+    }
+
+    @Override
+    public Post getPostByPostId(Integer postId, Integer userId) {
+        return postMapper.getPostByPostId(postId, userId);
+    }
+
+    @Override
+    public Integer updatePostHot(Integer postId, double addHot) {
+        return postMapper.updateHot(postId, addHot);
+    }
+
+    @Override
+    public List<Post> getForwardPost(Integer postId) {
+        return postMapper.getForwardPost(postId);
+    }
+
+    @Override
+    public List<Post> getHotPost(Integer askId) {
+        return postMapper.getHotPost(askId);
+    }
+
+    @Override
+    public List<Post> searchPost(Integer askId, String key, String orderBy) {
+        return postMapper.searchPost(askId, key, orderBy);
+    }
+
+    @Override
+    public List<Post> searchFollowPost(Integer askId, String key) {
+        return postMapper.searchFollowPost(askId, key);
+    }
+
+    @Override
+    public String getDateByPostId(Integer postId) {
+        return postMapper.getDateByPostId(postId);
     }
 }
