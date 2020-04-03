@@ -6,6 +6,7 @@ import com.hch.springboot_mybatis.entity.Updates;
 import com.hch.springboot_mybatis.entity.User;
 import com.hch.springboot_mybatis.service.MailService;
 import com.hch.springboot_mybatis.service.UserService;
+import com.hch.springboot_mybatis.utils.Constant;
 import com.hch.springboot_mybatis.utils.JsonResult;
 import com.hch.springboot_mybatis.utils.RandomCodeUtil;
 import org.slf4j.Logger;
@@ -53,8 +54,11 @@ public class UserController {
     }
     //登录
     @RequestMapping("/logIn")
-    public JsonResult<User> logIn(User user) {
+    public JsonResult<User> logIn(User user,HttpSession session) {
         User res = userService.logIn(user);
+        if(res!=null){
+            session.setAttribute(Constant.USER_TOKEN, res.getUserId());
+        }
         JsonResult<User> json;
         json = res != null
                 ? new JsonResult<>(res, "1", "验证成功")
