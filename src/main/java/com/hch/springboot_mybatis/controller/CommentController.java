@@ -3,7 +3,6 @@ package com.hch.springboot_mybatis.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hch.springboot_mybatis.entity.Comment;
-import com.hch.springboot_mybatis.entity.Post;
 import com.hch.springboot_mybatis.service.CommentService;
 import com.hch.springboot_mybatis.utils.JsonResult;
 import com.hch.springboot_mybatis.utils.PostHotUtil;
